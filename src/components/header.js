@@ -1,15 +1,17 @@
 import React from 'react'
+import Image from '../image.png'
 
 class Header extends React.Component {
     render() {
         return <div className="header">
-            <a href="#" className="image">Image</a>
+            <img src={Image} alt="applogo" id="logo"></img>
             <div className="header-right">
-                <a href="#">Login</a>
-                <a href="#">Sign out</a>
+                <a href="#" >SIGNUP</a>
+                <a href='#' >LOGIN</a>
             </div>
         </div>
 
     }
 }
 export default Header
+

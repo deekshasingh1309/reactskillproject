@@ -1,25 +1,27 @@
 import React from 'react'
+import Pic from '../img3.png'
 
 class Content extends React.Component {
-  key = this.props.jobData
   render() {
-
+    const data = this.props.jobData
     return (
       <div className="row">{
-        this.key.map((key, value) => {
+        data.map((key, value) => {
           return (
-            <div className="container content">
+            <div className="container content" key={value}>
               <div className='col-sm-3'>
-                <h4 >image</h4>
+                <img src={Pic} alt="logo" id="company"></img>
               </div>
               <div className='col-sm-5'>
-                <p><b>Company:</b> {key.company_name}</p>
-                <p><b>Profile:</b> {key.job_profile}</p>
-                <p><b>Salary:</b> {key.salary}</p>
+                <p><b>COMPANY:</b> {key.company_name}</p>
+                <p><b>PROFILE:</b> {key.job_profile}</p>
+                <p><b>SALARY:</b> {key.salary}</p>
               </div>
               <div className='col-sm-4'>
-                <p><b>Description:</b> {key.job_description}</p>
-                <p><b>Expires On:</b> {key.job_expire_on}</p>
+                <p><b>JOB:</b> {key.job_description}</p>
+                <p><b>CITY:</b> {key.city}</p>
+                <p><b>EXPIRES ON:</b> {key.job_expire_on}</p>
+                <button id="apply">Apply</button>
               </div>
             </div>
           )
