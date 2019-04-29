@@ -1,32 +1,27 @@
 import React from 'react';
-import data from './jobDetails'
 import './App.css';
-import Header from './components/header'
-import Content from './components/content'
-import Footer from './components/footer'
-import Filter from './components/filter'
+import {
+  BrowserRouter,
+  Route,
+  Switch,
+} from 'react-router-dom';
 
+import Signup from './components/signup';
+import Login from './components/login';
+import Main from './components/main';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      arrofJobs: data
-    }
-  }
-  filter = (filteredData) => {
-    this.setState({
-      arrofJobs: filteredData
-    })
-  }
-
   render() {
     return (
       <div className="App">
-        <Header />
-        <Filter myData={this.filter} jobData1={data} />
-        <Content jobData={this.state.arrofJobs} />
-        <Footer />
+        <BrowserRouter>
+
+          <Switch>
+            <Route path='/' exact component={Main} />
+            <Route path='/signup' component={Signup} />
+            <Route path='/login' component={Login} />
+          </Switch>
+        </BrowserRouter>
       </div>
     );
   }

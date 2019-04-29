@@ -135,3 +135,11 @@ margin-top:20px;
   opacity: 0.7;
 }
 
+.space {
+  margin-left: 10px;
+}
+
+.form {
+  width: 500px;
+  margin-left: 400px;
+}
