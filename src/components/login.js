@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Input from './fields/inputField';
+import axios from 'axios';
 
 class Login extends Component {
   constructor(props) {
@@ -10,10 +11,10 @@ class Login extends Component {
         email: '',
         password: ''
       },
-      formError: { email: '', password: '', name: '', phoneNo: '' }
+      formError: { email: '', password: ''}
     }
     this.handleInput = this.handleInput.bind(this);
-
+    this.handleLogin = this.handleLogin.bind(this);
   }
   handleInput(e) {
     let value = e.target.value;
@@ -25,6 +26,21 @@ class Login extends Component {
       }
     }), () => { this.validate(name, value) })
   }
+
+
+  handleLogin(e) {
+    const {email, password} = this.state.LoginFields;
+    e.preventDefault();
+    axios.post('http://localhost:8082/login', { email, password})
+    .then(function (response) {
+      console.log(localStorage.setItem('myData',JSON.stringify(response.LoginFields)));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+
 
   validate(field, value) {
     let errors = this.state.formError;
@@ -50,7 +66,7 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <form className="form">
+        <form className="form" onSubmit={this.handleLogin}>
         EMAIL:
           <Input inputType={'text'}
             name={'email'}

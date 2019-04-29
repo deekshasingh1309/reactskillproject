@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
 import Input from './fields/inputField';
+import axios from 'axios';
 
 //Signup component
 class Signup extends Component {
     constructor(props) {
         super(props);
+       
         this.state = {
           SignupFields: {
             name: '',
-            phoneNo: '',
             email: '',
-            password: ''
+            password: '',
+            phoneNo: ''
           },
           formError: { email: '', password: '', name: '', phoneNo: '' }
         }
         this.handleInput = this.handleInput.bind(this);
+  
+         this.handleSubmit = this.handleSubmit.bind(this);
+       
     
       }
       handleInput(e) {
@@ -27,7 +32,40 @@ class Signup extends Component {
           }
         }), () => { this.validate(name, value) })
       }
-    
+
+      // loadFromServer() {
+      //   axios.get(this.props.url)
+      //   .then(res => {
+      //   this.setState({ data: res.data });
+      //   })
+      //   }
+
+
+
+      handleSubmit(e) {
+        const {name,email, password,phoneNo} = this.state.SignupFields;
+        e.preventDefault();
+        axios.post('http://localhost:8082/naukriapp', { name,email, password, phoneNo})
+        .then(function () {
+          console.log(localStorage.setItem('myData',JSON.stringify(this.state.SignupFields)));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
+
+      // axios.get('/user', {
+      //   params: {
+      //     : 
+      //   }
+      // })
+      // .then(function (response) {
+      //   console.log(response);
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
+
       validate(field, value) {
         let errors = this.state.formError;
         switch (field) {
@@ -61,7 +99,7 @@ class Signup extends Component {
     render() {
       return (
         <div>
-          <form className="form">
+          <form className="form" onSubmit={ this.handleSubmit }>
             NAME:
                 <Input inputType={'text'}
               className="form-control"
@@ -101,7 +139,7 @@ class Signup extends Component {
               handleChange={this.handleInput}
             />
              <p>{this.state.formError.phoneNo}</p>
-            <button className="btn btn-primary">Submit</button>
+            <button className="btn btn-primary" onSubmit={ this.handleSubmit }>Submit</button>
           </form>
         </div>
       );

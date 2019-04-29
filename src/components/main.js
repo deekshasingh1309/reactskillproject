@@ -9,7 +9,8 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            arrofJobs: data
+            arrofJobs: data,
+            myData:localStorage.getItem('myData')
         }
     }
     filter = (filteredData) => {
