@@ -11,12 +11,12 @@ class Login extends Component {
         email: '',
         password: ''
       },
+  
       formError: { email: '', password: ''}
     }
-    this.handleInput = this.handleInput.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
+   
   }
-  handleInput(e) {
+  handleInput=(e)=> {
     let value = e.target.value;
     let name = e.target.name;
     this.setState(prevState => ({
@@ -28,12 +28,19 @@ class Login extends Component {
   }
 
 
-  handleLogin(e) {
-    const {email, password} = this.state.LoginFields;
+  handleLogin=(e)=> {
+   const {email, password} = this.state.LoginFields;
     e.preventDefault();
-    axios.post('http://localhost:8082/login', { email, password})
-    .then(function (response) {
-      console.log(localStorage.setItem('myData',JSON.stringify(response.LoginFields)));
+    axios.post('http://localhost:8082/sign', { email, password})
+    .then((response) =>{
+      console.log(localStorage.setItem('myData',JSON.stringify(response.data)));
+      if((this.state.LoginFields.email===response.data.email) &&(this.state.LoginFields.password===response.data.password) )
+    { 
+      return this.props.history.push('/'); 
+    } 
+     else{
+       return ('Invalid user');
+      }
     })
     .catch(function (error) {
       console.log(error);
@@ -42,7 +49,7 @@ class Login extends Component {
 
 
 
-  validate(field, value) {
+  validate=(field, value)=> {
     let errors = this.state.formError;
     switch (field) {
       case 'email':
@@ -66,7 +73,7 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <form className="form" onSubmit={this.handleLogin}>
+        <form className="form" >
         EMAIL:
           <Input inputType={'text'}
             name={'email'}
@@ -83,7 +90,7 @@ class Login extends Component {
             handleChange={this.handleInput}
           />
            <p>{this.state.formError.password}</p>
-          <button className="btn btn-primary">Submit</button>
+          <button className="btn btn-primary" onClick={this.handleLogin}>Submit</button>
         </form>
       </div>
     );
