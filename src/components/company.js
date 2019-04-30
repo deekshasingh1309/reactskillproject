@@ -6,7 +6,7 @@ class Company extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        jobFields = { 
+        jobFields:{ 
         job_profile  : '',
         company_name: '',
         job_description:'',
@@ -25,7 +25,7 @@ class Company extends Component {
       {
         ...prevState.jobFields, [name]: value
       }
-    }), () => { this.validate(name, value) })
+    }))
   }
 
 
@@ -36,9 +36,8 @@ class Company extends Component {
     'http://localhost:8082/createjobs', 
     {job_profile, company_name,job_description,job_expire_on,city, salary}
     )
-    .then((response) =>{
-      console.log(localStorage.setItem('myData2',JSON.stringify(response.data)));
-      return this.props.history.push('/');  
+    .then(() =>{
+      this.props.history.push('/');  
     })
     .catch((error)=> {
       console.log(error);
@@ -76,7 +75,7 @@ class Company extends Component {
             value={this.state.jobFields.job_profile}
             placeholder={'job profile'}
             handleChange={this.handleInput} />
-          <p>{this.state.formError.job_profile}</p>
+          {/* <p>{this.state.formError.job_profile}</p> */}
 
           Company Name:
           <Input inputType={'text'}
@@ -85,7 +84,7 @@ class Company extends Component {
             placeholder={'company name'}
             handleChange={this.handleInput}
           />
-           <p>{this.state.formError.company_name}</p>
+           {/* <p>{this.state.formError.company_name}</p> */}
 
            Job description:
           <Input inputType={'text'}
@@ -94,7 +93,7 @@ class Company extends Component {
             placeholder={'job description'}
             handleChange={this.handleInput} 
             />
-          <p>{this.state.formError.job_description}</p>
+          {/* <p>{this.state.formError.job_description}</p> */}
 
           Job expire date:
           <Input inputType={'text'}
@@ -103,7 +102,7 @@ class Company extends Component {
             placeholder={'job expire on'}
             handleChange={this.handleInput} 
             />
-          <p>{this.state.formError.job_expire_on}</p>
+          {/* <p>{this.state.formError.job_expire_on}</p> */}
 
           City:
           <Input inputType={'text'}
@@ -112,7 +111,7 @@ class Company extends Component {
             placeholder={'city'}
             handleChange={this.handleInput} 
             />
-          <p>{this.state.formError.city}</p>
+          {/* <p>{this.state.formError.city}</p> */}
 
           Salary:
           <Input inputType={'text'}
@@ -121,7 +120,7 @@ class Company extends Component {
             placeholder={'salary'}
             handleChange={this.handleInput} 
             />
-          <p>{this.state.formError.salary}</p>
+          {/* <p>{this.state.formError.salary}</p> */}
 
           <button className="btn btn-primary" onClick={this.handleCompany}>Submit</button>
         </form>
