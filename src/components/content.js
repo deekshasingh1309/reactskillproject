@@ -1,11 +1,13 @@
 import React from 'react'
 import Pic from '../img3.png'
-
+var data;
 class Content extends React.Component {
+
   render() {
-    const data = this.props.jobData
+    data = this.props.jobData
     return (
-      <div className="row">{
+      <div className="row">
+      {
         data.map((key, value) => {
           return (
             <div className="container content" key={value}>

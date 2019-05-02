@@ -27,7 +27,6 @@ class Login extends Component {
     }), () => { this.validate(name, value) })
   }
 
-
   handleLogin=(e)=> {
    const {email, password} = this.state.LoginFields;
     e.preventDefault();
@@ -47,8 +46,6 @@ class Login extends Component {
     });
   }
 
-
-
   validate=(field, value)=> {
     let errors = this.state.formError;
     switch (field) {
@@ -63,11 +60,9 @@ class Login extends Component {
       default:
         break;
     }
-
     this.setState({
       formError: errors
     })
-
   }
 
   render() {

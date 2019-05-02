@@ -28,7 +28,7 @@ class Header extends React.Component {
                                     isLoggedin() && this.user.roles === 3 &&  <span><Link to='/addjobs'>Add Job</Link></span>
                                 }
                                 {
-                                    isLoggedin() &&  <span><Link to='/login'>Hi! {this.user.name}</Link></span>
+                                    isLoggedin() &&  <span><Link to='/login'></Link></span> && <span>Welcome {this.user.name}</span>
                                 }
                                 {
                                     isLoggedin() &&  <span><Link to='/' onClick={this.logout}>Logout</Link></span>

@@ -18,7 +18,7 @@ class Filter extends React.Component {
 
     submitForm = (event) => {
         event.preventDefault();
-        const jobdata = this.props.jobData1
+        const jobdata = this.props.jobData
         var data;
         if (this.state.company_name === '' && this.state.job_profile === '' && this.state.city === '') {
             data = jobdata;

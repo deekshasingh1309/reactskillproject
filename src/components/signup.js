@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Input from './fields/inputField';
-
+import axios from 'axios';
 
 //Signup component
 class Signup extends Component {
@@ -40,9 +40,14 @@ class Signup extends Component {
 
   handleSubmit=(e)=> {
    // const roles="user";
+   const {name,email, password,phone} = this.state.SignupFields;
     e.preventDefault();
+    axios.post('http://localhost:8082/naukriapp', {name, email, password,phone})
+    .then((response) =>{
+      console.log(localStorage.setItem('myData',JSON.stringify(response.data)));
       return this.props.history.push('/login'); 
-  }
+  })
+}
 
   // axios.get('/user', {
   //   params: {
