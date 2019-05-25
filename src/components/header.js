@@ -2,10 +2,14 @@ import React from 'react'
 import Image from '../image.png'
 import { Link } from 'react-router-dom'
 import isLoggedin from './isLoggedin'
+
 class Header extends React.Component {
     user = JSON.parse(localStorage.getItem('myData'))
     logout = () => {
         localStorage.removeItem('myData')
+        localStorage.removeItem('Currentuser')
+        localStorage.removeItem('user_type')
+        localStorage.removeItem('isLoggedin')
         this.props.history.push('/')
     }
     render() {

@@ -1,11 +1,32 @@
 import React from 'react'
 import Pic from '../img3.png'
-var data;
-class Content extends React.Component {
+import { withRouter } from "react-router-dom";
 
+class Content extends React.Component {
+ constructor(props){
+   super()
+  this.state={
+    data:[],
+  }
+  console.log(this.state);
+  
+ }
+ componentDidMount(){
+   this.setState({
+     data: this.props.jobData
+
+   })
+ }
+
+ edit=(key)=>{
+   //console.log(key);
+   this.props.history.push({pathname:'/editform',state:{data:key}})
+ }
   render() {
-    data = this.props.jobData
-    return (
+  let user =JSON.parse(localStorage.getItem('myData'));
+  let data = this.props.jobData
+console.log(data)
+  return (
       <div className="row">
       {
         data.map((key, value) => {
@@ -22,8 +43,10 @@ class Content extends React.Component {
               <div className='col-sm-4'>
                 <p><b>JOB:</b> {key.job_description}</p>
                 <p><b>CITY:</b> {key.city}</p>
-                <p><b>EXPIRES ON:</b> {key.job_expire_on}</p>
-                <button id="apply">Apply</button>
+                <p><b>EXPIRES ON:</b> {key.job_expire_on}</p>{
+                user!==null && user.roles===3?<button id="edit" onClick={(e)=>{this.edit(key)}}>Edit</button>:<button id="apply">Apply</button>
+                }
+
               </div>
             </div>
           )
@@ -35,4 +58,4 @@ class Content extends React.Component {
   }
 }
 
-export default Content
+export default withRouter(Content)

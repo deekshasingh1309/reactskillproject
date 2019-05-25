@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Input from './fields/inputField';
-import axios from 'axios';
 
 class Login extends Component {
   constructor(props) {
@@ -16,6 +15,11 @@ class Login extends Component {
     }
    
   }
+
+  componentDidMount() {
+    localStorage.getItem('isLoggedin') === "true" && this.props.history.push('/')
+}
+
   handleInput=(e)=> {
     let value = e.target.value;
     let name = e.target.name;
@@ -27,23 +31,24 @@ class Login extends Component {
     }), () => { this.validate(name, value) })
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ currentUser: nextProps.currentUser }, () => {
+      localStorage.setItem('isLoggedin',"true")
+      localStorage.setItem("Currentuser", JSON.stringify(nextProps.currentUser.name));
+      localStorage.setItem("myData", JSON.stringify(nextProps.currentUser));
+      localStorage.setItem("user_type", JSON.stringify(nextProps.currentUser.roles));
+
+      return this.props.history.push('/')
+   })
+
+}
+
   handleLogin=(e)=> {
-   const {email, password} = this.state.LoginFields;
     e.preventDefault();
-    axios.post('http://localhost:8082/sign', { email, password})
-    .then((response) =>{
-      console.log(localStorage.setItem('myData',JSON.stringify(response.data)));
-      if((this.state.LoginFields.email===response.data.email) &&(this.state.LoginFields.password===response.data.password) )
-    { 
-      return this.props.history.push('/'); 
-    } 
-     else{
-       return ('Invalid user');
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    this.props.login({
+      email: this.state.LoginFields.email,
+      password: this.state.LoginFields.password
+  }); 
   }
 
   validate=(field, value)=> {

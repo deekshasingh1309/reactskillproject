@@ -3,7 +3,7 @@ import Header from './header'
 import Content from './content'
 import Footer from './footer'
 import Filter from './filter'
-import axios from 'axios';
+
 import isLoggedin from './isLoggedin';
 
 class Main extends React.Component {
@@ -12,13 +12,13 @@ class Main extends React.Component {
         this.state = {
             arrofJobs: [],
             JobPosted: [],
-            forFilter: []
-
+            forFilter: [],
+            user :localStorage.getItem('myData') ? JSON.parse(localStorage.getItem('myData')) : {}
         }
 
     }
 
-    user = JSON.parse(localStorage.getItem('myData'))
+
 
     filter = (filteredData) => {
         this.setState({
@@ -27,30 +27,26 @@ class Main extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8082/jobs')
-            .then(res => {
-                console.log(res)
-                this.setState({
-                    arrofJobs: res.data.reverse(),
-                    forFilter: res.data
-                });
+    this.props.JobListing();
+    }
 
-                try {
-                    if (this.user.roles === 3) {
-                        const filteredCompanyPost = this.state.arrofJobs.filter((posts) => {
-                            if (this.user.name.toLowerCase() === posts.company_name.toLowerCase() ) {
-                                return true;
-                            }
-                            return false;
-                        })
-                        this.setState({
-                            JobPosted: filteredCompanyPost
-                        })
-                        console.log(filteredCompanyPost)
-                    } 
-                } catch (error) {
-                    console.log(error.message)
-                }
+    componentWillReceiveProps(nextProps) {
+        nextProps.dataJob && this.props.JobListing();
+            this.setState({
+                arrofJobs: nextProps.Job_Listing,
+                forFilter: nextProps.Job_Listing
+            },()=>{
+                if (this.state.user.roles === 3) {
+                    const filteredCompanyPost = this.state.arrofJobs.filter((posts) => {
+                        if (this.state.user.name.toLowerCase() === posts.company_name.toLowerCase() ) {
+                            return true;
+                        }
+                        return false;
+                    })
+                    this.setState({
+                        JobPosted: filteredCompanyPost
+                    })
+                } 
             })
     }
 
@@ -60,8 +56,8 @@ class Main extends React.Component {
                 <Header />
                 <Filter myData={this.filter} jobData={this.state.forFilter} />
                 {!isLoggedin() && <Content jobData={this.state.arrofJobs} />}
-                {isLoggedin() && this.user.roles === 2 && <Content jobData={this.state.arrofJobs} />}
-                {isLoggedin() && this.user.roles === 3 && <Content jobData={this.state.JobPosted} />}
+                {isLoggedin() && this.state.user.roles === 2 && <Content jobData={this.state.arrofJobs} />}
+                {isLoggedin() && this.state.user.roles === 3 && <Content jobData={this.state.JobPosted} />}
 
                 <Footer />
             </div>

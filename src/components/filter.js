@@ -24,17 +24,20 @@ class Filter extends React.Component {
             data = jobdata;
         } else {
             data = jobdata.filter((item) => {
-                if (item.company_name.toLowerCase() === this.state.company_name.toLowerCase()) {
-                    return true;
+                if (this.state.company_name && item.company_name.toLowerCase() !== this.state.company_name.toLowerCase()) {
+                    return false;
                 }
-                if (item.job_profile.toLowerCase() === this.state.job_profile.toLowerCase()) {
-                    return true;
+                if (this.state.job_profile && item.job_profile.toLowerCase() !== this.state.job_profile.toLowerCase()) {
+                    return false;
                 }
-                if (item.city.toLowerCase() === this.state.city.toLowerCase()) {
-                    return true;
+                if (this.state.city && item.city.toLowerCase() !== this.state.city.toLowerCase()) {
+                    return false;
+                }
+                else{
+                    return true
                 }
 
-                return false
+              
             })
         }
         this.props.myData(data)

@@ -5,10 +5,11 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-import Signup from './components/signup';
-import Login from './components/login';
-import Main from './components/main';
-import AddJob from './components/company'
+import Signup from './redux/containers/signupContainer';
+import Login from './redux/containers/loginContainer';
+import {main} from './redux/containers/jobContainer';
+import {company} from './redux/containers/jobContainer';
+import {editform} from './redux/containers/jobContainer'
 
 class App extends React.Component {
   render() {
@@ -16,10 +17,11 @@ class App extends React.Component {
       <div className="App">
         <BrowserRouter>
           <Switch>
-            <Route path='/' exact component={Main} />
+            <Route path='/' exact component={main} />
             <Route path='/signup' component={Signup} />
             <Route path='/login' component={Login} />
-            <Route path="/addjobs" component={AddJob}/>
+            <Route path="/addjobs" component={company}/>
+            <Route path="/editform" component={editform}/>
           </Switch>
         </BrowserRouter>
       </div>

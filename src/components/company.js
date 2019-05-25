@@ -1,20 +1,40 @@
 import React, { Component } from 'react';
 import Input from './fields/inputField';
-import axios from 'axios';
+import { SKILLS } from '../skills';
+import { WithContext as ReactTags } from 'react-tag-input';
+
+var user;
+const suggestions = SKILLS.map((skills) => {
+  return {
+    id: skills,
+    text: skills
+  }
+})
+
+const KeyCodes = {
+  comma: 188,
+  enter: 13,
+};
+
+const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 class Company extends Component {
   constructor(props) {
     super(props);
+    user = JSON.parse(localStorage.getItem('myData'))
     this.state = {
       jobFields: {
         job_profile: '',
-        company_name: '',
-        job_description: '',
+        company_name: user.name,
+        job_description: [],
         job_expire_on: '',
         city: '',
-        salary: ''
+        salary: '',
+        suggestions: suggestions,
       },
-      formError: { job_profile: '', company_name: '', job_description: '', job_expire_on: '', city: '',salary: ''}
+      skill: '',
+      job_skills: [],
+      formError: { job_profile: '', company_name: '', job_description: '', job_expire_on: '', city: '', salary: '' }
     }
   }
 
@@ -22,24 +42,56 @@ class Company extends Component {
     let value = e.target.value;
     let name = e.target.name;
     this.setState(prevState => ({
+
       jobFields:
       {
-        ...prevState.jobFields, [name]: value
+        ...prevState.jobFields, [name]: value,
+        job_description: this.state.job_skills,
+
       }
     }), () => { this.validate(name, value) })
   }
 
   handleCompany = (e) => {
-    const { job_profile, company_name, job_description, job_expire_on, city, salary } = this.state.jobFields;
     e.preventDefault();
-    axios.post('http://localhost:8082/createjobs',{ job_profile, company_name, job_description, job_expire_on, city, salary })
-      .then(() => {
-       return this.props.history.push('/');
+    const { job_profile, company_name, job_description, job_expire_on, city, salary } = this.state.jobFields;
+
+    this.props.addJob({ job_profile, company_name, job_description, job_expire_on, city, salary })
+    if (this.state.jobFields.job_profile && this.state.jobFields.job_description && this.state.jobFields.company_name && this.state.jobFields.job_expire_on && this.state.jobFields.city && this.state.jobFields.salary) {
+      alert("successfully POSTED")
+
+      this.setState({
+        job_profile: '',
+        company_name: '',
+        job_description: [],
+        job_expire_on: '',
+        city: '',
+        salary: ''
+
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      return this.props.history.push('/');
+    }
+    else {
+      alert("Blank form can't be submitted")
+      return this.props.history.push('/addjobs');
+    }
   }
+
+  handleDelete = (i) => {
+    const { job_description } = this.state.jobFields;
+    this.setState({
+      job_description: job_description.filter((tag, index) => index !== i),
+    });
+  }
+
+  handleAddition = (tag, e) => {
+    console.log("hfxhjfh")
+    if (e.key == "Enter") {
+      console.log('dfghg')
+    }
+
+  }
+
 
   validate = (field, value) => {
     let errors = this.state.formError;
@@ -49,10 +101,10 @@ class Company extends Component {
         errors.job_profile = errors.job_profile ? '' : 'it is invalid';
         break;
 
-      case 'company_name':
-        errors.company_name = value.match(/^[A-Za-z\s]+$/i)
-        errors.company_name = errors.company_name ? '' : 'it is invalid';
-        break;
+      // case 'company_name':
+      //   errors.company_name = value.match(/^[A-Za-z\s]+$/i)
+      //   errors.company_name = errors.company_name ? '' : 'it is invalid';
+      //   break;
 
       case 'job_description':
         errors.job_description = value.match(/^[A-Za-z\s]+$/i)
@@ -65,7 +117,7 @@ class Company extends Component {
         break;
 
       case 'city':
-        errors.city = value.match(/^[a-z][^!¡?÷?¿\\+=@#$%ˆ&*{}|~<>;:[\]]{6,}$/i);;
+        errors.city = value.match(/^[A-Za-z\s]+$/i);;
         errors.city = errors.city ? '' : ' must be valid city'
         break;
 
@@ -81,66 +133,113 @@ class Company extends Component {
       formError: errors
     })
   }
+  displayTags() {
+    if (this.state.job_skills.length > 0) {
+      return (<div>
+        {
+          this.state.job_skills.map((key, value) => {
+            return (
+              <span class="ReactTags__tag" draggable="true" >{key}
+                <a class="ReactTags__remove">×</a>
+              </span>
+            )
+          })
+        }
+      </div>)
+
+    } else {
+      return (<div />)
+    }
+  }
 
   render() {
-    return (
-      <div>
-        <form className="form" >
-          Profile:
-          <Input inputType={'text'}
-            name={'job_profile'}
-            value={this.state.jobFields.job_profile}
-            placeholder={'job profile'}
-            handleChange={this.handleInput} />
-          <p>{this.state.formError.job_profile}</p>
+    const job_skills = this.state.job_skills;
+    //const job_description = this.state.job_skills;
 
-          Company Name:
+    return (
+
+      <div>
+        {/* <form className="form" > */}
+        Profile:
+          <Input inputType={'text'}
+          name={'job_profile'}
+          value={this.state.jobFields.job_profile}
+          placeholder={'job profile'}
+          handleChange={this.handleInput} />
+        <p>{this.state.formError.job_profile}</p>
+
+        {/* Company Name:
           <Input inputType={'text'}
             name={'company_name'}
             value={this.state.jobFields.company_name}
             placeholder={'company name'}
             handleChange={this.handleInput}
           />
-          <p>{this.state.formError.company_name}</p>
+          <p>{this.state.formError.company_name}</p> */}
 
-          Job description:
+        Job description:
+          <div class="ReactTags__tags">
+          <div class="ReactTags__selected">
+            {this.displayTags()}
+            <div class="ReactTags__tagInput">
+              <Input inputType={'text'}
+                class={"ReactTags__tagInputField"}
+                name={'Skills'}
+                value={this.state.skill}
+                placeholder={'skills'}
+                aria-label={"Add new tag"}
+                handleChange={text => {
+                  this.setState({ skill: text.target.value });
+                }}
+                suggestions={suggestions}
+                handleTagClick={this.handleTagClick}
+                onKeyPress={event => {
+                  if (event.key === 'Enter') {
+                    let skill = this.state.skill
+                    if (skill !== '') {
+                      this.setState({ job_skills: [...job_skills, skill], skill: "", job_description: [...job_skills, skill] });
+
+                    }
+                    this.setState({ job_description: this.state.job_skills })
+                    
+                  }
+                }}
+
+              />
+            </div>
+          </div>
+        </div>
+        <p>{this.state.formError.job_description}</p>
+
+        Job expire date:
           <Input inputType={'text'}
-            name={'job_description'}
-            value={this.state.jobFields.job_description}
-            placeholder={'job description'}
-            handleChange={this.handleInput}
-          />
-          <p>{this.state.formError.job_description}</p>
+          name={'job_expire_on'}
+          value={this.state.jobFields.job_expire_on}
+          placeholder={'job expire on'}
+          handleChange={this.handleInput}
+        />
+        <p>{this.state.formError.job_expire_on}</p>
 
-          Job expire date:
+        City:
           <Input inputType={'text'}
-            name={'job_expire_on'}
-            value={this.state.jobFields.job_expire_on}
-            placeholder={'job expire on'}
-            handleChange={this.handleInput}
-          />
-          <p>{this.state.formError.job_expire_on}</p>
+          name={'city'}
+          value={this.state.jobFields.city}
+          placeholder={'city'}
+          handleChange={this.handleInput}
+        />
+        <p>{this.state.formError.city}</p>
 
-          City:
+        Salary:
           <Input inputType={'text'}
-            name={'city'}
-            value={this.state.jobFields.city}
-            placeholder={'city'}
-            handleChange={this.handleInput}
-          />
-          <p>{this.state.formError.city}</p>
+          name={'salary'}
+          value={this.state.jobFields.salary}
+          placeholder={'salary'}
+          handleChange={this.handleInput}
+        />
+        <p>{this.state.formError.salary}</p>
 
-          Salary:
-          <Input inputType={'text'}
-            name={'salary'}
-            value={this.state.jobFields.salary}
-            placeholder={'salary'}
-            handleChange={this.handleInput}
-          />
-          <p>{this.state.formError.salary}</p>
-
-          <button className="btn btn-primary" onClick={this.handleCompany}>Submit</button>
-        </form>
+        <button className="btn btn-primary" onClick={this.handleCompany}>Add</button>
+        {/* </form> */}
       </div>
     );
   }

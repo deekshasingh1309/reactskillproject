@@ -1,25 +1,30 @@
 import React, { Component } from 'react';
 import Input from './fields/inputField';
-import axios from 'axios';
+// import { userActions } from '../redux/users/userAction';
+// import { Link } from 'react-router-dom'
 
 //Signup component
 class Signup extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       SignupFields: {
         name: '',
         email: '',
         password: '',
-        phone: '',
-        roles:''
+        phone: ''
+        
       },
    
       formError: { email: '', password: '', name: '', phone: '' }
     }
-
-
   }
+
+  componentDidMount() {
+    localStorage.getItem('isLoggedin') === "true" && this.props.history.push('/')
+}
+  
   handleInput=(e)=> {
     let value = e.target.value;
     let name = e.target.name;
@@ -31,35 +36,27 @@ class Signup extends Component {
     }), () => { this.validate(name, value) })
   }
 
-  // loadFromServer() {
-  //   axios.get(this.props.url)
-  //   .then(res => {
-  //   this.setState({ data: res.data });
-  //   })
-  //   }
 
   handleSubmit=(e)=> {
-   // const roles="user";
+  
    const {name,email, password,phone} = this.state.SignupFields;
     e.preventDefault();
-    axios.post('http://localhost:8082/naukriapp', {name, email, password,phone})
-    .then((response) =>{
-      console.log(localStorage.setItem('myData',JSON.stringify(response.data)));
+    const roles="user"
+    this.props.signup({name, email, password,phone,roles})
+    alert("successfully signup")
+    console.log(roles);
+    this.setState({
+      name: '',
+      email: '',
+      password: '',
+      phone: ''
+    
+      })
+
       return this.props.history.push('/login'); 
-  })
+
 }
 
-  // axios.get('/user', {
-  //   params: {
-  //     : 
-  //   }
-  // })
-  // .then(function (response) {
-  //   console.log(response);
-  // })
-  // .catch(function (error) {
-  //   console.log(error);
-  // });
 
   validate=(field, value)=> {
     let errors = this.state.formError;
