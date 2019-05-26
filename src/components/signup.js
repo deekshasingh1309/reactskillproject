@@ -2,6 +2,21 @@ import React, { Component } from 'react';
 import Input from './fields/inputField';
 // import { userActions } from '../redux/users/userAction';
 // import { Link } from 'react-router-dom'
+import SKILLS from '../skills'
+import { WithContext as ReactTags } from 'react-tag-input'
+
+const KeyCodes = {
+    comma: 188,
+    enter: 13
+}
+
+const suggestions = SKILLS.map(skill => {
+  return {
+      id: skill,
+      text: skill
+  }
+})
+const delimiters = [KeyCodes.comma, KeyCodes.enter]
 
 //Signup component
 class Signup extends Component {
@@ -9,17 +24,36 @@ class Signup extends Component {
     super(props);
 
     this.state = {
-      SignupFields: {
+      
+        tags: [],
+        suggestions: suggestions,
         name: '',
         email: '',
         password: '',
-        phone: ''
-        
-      },
-   
+        phone: '',
       formError: { email: '', password: '', name: '', phone: '' }
     }
   }
+
+  handleDelete = (i) => {
+    const { tags } = this.state
+    this.setState({
+        tags: tags.filter((tag, index) => index !== i)
+    })
+}
+
+handleAddition = (tag) => {
+    this.setState(state => ({ tags: [...state.tags, tag] })
+    )
+}
+
+handleDrag = (tag, currPos, newPos) => {
+    const tags = [...this.state.tags]
+    const newTags = tags.slice()
+    newTags.splice(currPos, 1)
+    newTags.splice(newPos, 0, tag)
+    this.setState({ tags: newTags })
+}
 
   componentDidMount() {
     localStorage.getItem('isLoggedin') === "true" && this.props.history.push('/')
@@ -29,34 +63,32 @@ class Signup extends Component {
     let value = e.target.value;
     let name = e.target.name;
     this.setState(prevState => ({
-      SignupFields:
-      {
+     
         ...prevState.SignupFields, [name]: value
-      }
+      
     }), () => { this.validate(name, value) })
   }
 
 
   handleSubmit=(e)=> {
   
-   const {name,email, password,phone} = this.state.SignupFields;
+   const {name,email, password,phone,tags} = this.state;
     e.preventDefault();
     const roles="user"
-    this.props.signup({name, email, password,phone,roles})
+    this.props.signup({name, email, password,phone,tags,roles})
     alert("successfully signup")
-    console.log(roles);
+    
     this.setState({
       name: '',
       email: '',
       password: '',
-      phone: ''
-    
+      phone: '',
+      tags: []
       })
 
       return this.props.history.push('/login'); 
 
 }
-
 
   validate=(field, value)=> {
     let errors = this.state.formError;
@@ -89,6 +121,7 @@ class Signup extends Component {
 
 
   render() {
+    const { tags, suggestions } = this.state
     return (
       <div>
         <form className="form" >
@@ -96,7 +129,7 @@ class Signup extends Component {
                 <Input inputType={'text'}
             className="form-control"
             name={'name'}
-            value={this.state.SignupFields.name}
+            value={this.state.name}
             placeholder={'NAME'}
             handleChange={this.handleInput}
           />
@@ -106,7 +139,7 @@ class Signup extends Component {
           EMAIL:
                   <Input inputType={'text'}
             name={'email'}
-            value={this.state.SignupFields.email}
+            value={this.state.email}
             placeholder={'EMAIL'}
             handleChange={this.handleInput}
           />
@@ -116,7 +149,7 @@ class Signup extends Component {
           PASSWORD:
                   <Input inputType={'password'}
             name={'password'}
-            value={this.state.SignupFields.password}
+            value={this.state.password}
             placeholder={'PASSWORD'}
             handleChange={this.handleInput}
           />
@@ -127,12 +160,24 @@ class Signup extends Component {
                   <Input 
                   inputType={'text'}
                   name={'phone'}
-                  value={this.state.SignupFields.phone}
+                  value={this.state.phone}
                   placeholder={'PHONE'}
                   handleChange={this.handleInput}
           />
           <p>{this.state.formError.phone}</p>
-          <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
+
+        SKILLS:
+
+          <ReactTags
+                  tags={tags}
+                  suggestions={suggestions}
+                  delimiters={delimiters}
+                  handleDelete={this.handleDelete}
+                  handleAddition={this.handleAddition}
+                  handleDrag={this.handleDrag}
+            />
+           
+         <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
         </form>
       </div>
     );

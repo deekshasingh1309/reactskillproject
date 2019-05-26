@@ -22,12 +22,10 @@ export const EditJob =(data) => {
 }
 
 export const addJob =(job)=>{
-    console.log(job)
   return dispatch => {
     axios.post('http://localhost:8082/createjobs',job)
       .then((res) => {
         if (res.data.errors) {
-          console.log(res.data.errors)
             window.alert(JSON.stringify(res.data.message))
         } else {
             dispatch(JobData(res.data))

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Input from './fields/inputField';
-import { SKILLS } from '../skills';
+import SKILLS  from '../skills';
 import { WithContext as ReactTags } from 'react-tag-input';
 
 var user;

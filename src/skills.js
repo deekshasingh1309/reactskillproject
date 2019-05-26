@@ -1,4 +1,4 @@
-export const SKILLS = [
+const SKILLS = [
     "Angular",
     "React",
     "Node",
@@ -17,3 +17,5 @@ export const SKILLS = [
     "Python",
     "ML",
 ]
+
+export default SKILLS

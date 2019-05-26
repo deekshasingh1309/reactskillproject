@@ -15,10 +15,7 @@ class Main extends React.Component {
             forFilter: [],
             user :localStorage.getItem('myData') ? JSON.parse(localStorage.getItem('myData')) : {}
         }
-
     }
-
-
 
     filter = (filteredData) => {
         this.setState({

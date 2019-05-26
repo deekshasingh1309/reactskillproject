@@ -8,7 +8,7 @@ class Content extends React.Component {
   this.state={
     data:[],
   }
-  console.log(this.state);
+ // console.log(this.state);
   
  }
  componentDidMount(){
@@ -25,7 +25,6 @@ class Content extends React.Component {
   render() {
   let user =JSON.parse(localStorage.getItem('myData'));
   let data = this.props.jobData
-console.log(data)
   return (
       <div className="row">
       {
