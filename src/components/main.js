@@ -24,7 +24,7 @@ class Main extends React.Component {
     }
 
     componentDidMount() {
-    this.props.JobListing();
+    this.props.JobListing(this.state.user.skills);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -52,9 +52,9 @@ class Main extends React.Component {
             <div >
                 <Header />
                 <Filter myData={this.filter} jobData={this.state.forFilter} />
-                {!isLoggedin() && <Content jobData={this.state.arrofJobs} />}
+                {!isLoggedin() && <Content jobData={this.state.arrofJobs.reverse()} />}
                 {isLoggedin() && this.state.user.roles === 2 && <Content jobData={this.state.arrofJobs} />}
-                {isLoggedin() && this.state.user.roles === 3 && <Content jobData={this.state.JobPosted} />}
+                {isLoggedin() && this.state.user.roles === 3 && <Content jobData={this.state.JobPosted.reverse()} />}
 
                 <Footer />
             </div>

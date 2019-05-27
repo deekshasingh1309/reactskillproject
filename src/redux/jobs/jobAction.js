@@ -38,9 +38,13 @@ export const addJob =(job)=>{
 }
 
 
-export const JobListing =()=>{
+export const JobListing =(userskills)=>{
   return dispatch => {
-    axios.get('http://localhost:8082/jobs')
+    axios.get('http://localhost:8082/jobs', {
+      params: {
+        skills:userskills
+      }
+    })
       .then((res) => {
         if (res.data.errors) {
             window.alert(JSON.stringify(res.data.message))
@@ -56,6 +60,7 @@ export const JobListing =()=>{
 }
 
 export const EditJobs=(data)=> {
+  console.log('data',data);
   return dispatch => {
     axios.put('http://localhost:8082/updatejobs',data)
     .then((res) => {
@@ -63,8 +68,9 @@ export const EditJobs=(data)=> {
           window.alert(JSON.parse(res.data.message));
       }
       else {
-              dispatch(EditJob(res.data));
-            }
+          dispatch(EditJob(res.data));
+          dispatch(JobListing())
+      }          
   }).catch((err) => {
       return err;
   })

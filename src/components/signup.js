@@ -24,8 +24,8 @@ class Signup extends Component {
     super(props);
 
     this.state = {
-      
-        tags: [],
+      currentUser:'',
+        skills: [],
         suggestions: suggestions,
         name: '',
         email: '',
@@ -36,23 +36,34 @@ class Signup extends Component {
   }
 
   handleDelete = (i) => {
-    const { tags } = this.state
+    const { skills } = this.state
     this.setState({
-        tags: tags.filter((tag, index) => index !== i)
+        skills: skills.filter((tag, index) => index !== i)
     })
 }
 
 handleAddition = (tag) => {
-    this.setState(state => ({ tags: [...state.tags, tag] })
+    this.setState(state => ({ skills: [...state.skills, tag] })
     )
 }
 
 handleDrag = (tag, currPos, newPos) => {
-    const tags = [...this.state.tags]
-    const newTags = tags.slice()
+    const skills = [...this.state.skills]
+    const newTags = skills.slice()
     newTags.splice(currPos, 1)
     newTags.splice(newPos, 0, tag)
-    this.setState({ tags: newTags })
+    this.setState({ skills: newTags })
+}
+componentWillReceiveProps(nextProps) {
+  this.setState({ currentUser: nextProps.currentUser }, () => {
+    localStorage.setItem('isLoggedin',"true")
+    localStorage.setItem("Currentuser", JSON.stringify(nextProps.currentUser.name));
+    localStorage.setItem("myData", JSON.stringify(nextProps.currentUser));
+    localStorage.setItem("user_type", JSON.stringify(nextProps.currentUser.roles));
+
+    return this.props.history.push('/')
+ })
+
 }
 
   componentDidMount() {
@@ -64,7 +75,7 @@ handleDrag = (tag, currPos, newPos) => {
     let name = e.target.name;
     this.setState(prevState => ({
      
-        ...prevState.SignupFields, [name]: value
+        ...prevState, [name]: value
       
     }), () => { this.validate(name, value) })
   }
@@ -72,10 +83,10 @@ handleDrag = (tag, currPos, newPos) => {
 
   handleSubmit=(e)=> {
   
-   const {name,email, password,phone,tags} = this.state;
+   const {name,email, password,phone,skills} = this.state;
     e.preventDefault();
     const roles="user"
-    this.props.signup({name, email, password,phone,tags,roles})
+    this.props.signup({name, email, password,phone,skills,roles})
     alert("successfully signup")
     
     this.setState({
@@ -83,7 +94,7 @@ handleDrag = (tag, currPos, newPos) => {
       email: '',
       password: '',
       phone: '',
-      tags: []
+      skills: []
       })
 
       return this.props.history.push('/login'); 
@@ -121,7 +132,7 @@ handleDrag = (tag, currPos, newPos) => {
 
 
   render() {
-    const { tags, suggestions } = this.state
+    const { skills, suggestions } = this.state
     return (
       <div>
         <form className="form" >
@@ -169,7 +180,7 @@ handleDrag = (tag, currPos, newPos) => {
         SKILLS:
 
           <ReactTags
-                  tags={tags}
+                  tags={skills}
                   suggestions={suggestions}
                   delimiters={delimiters}
                   handleDelete={this.handleDelete}

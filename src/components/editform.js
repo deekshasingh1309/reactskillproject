@@ -6,14 +6,13 @@ class JobEdit extends Component {
     super(props);
 
     this.state = {
-      editFields: {
         job_profile: '',
         company_name: '',
         job_description: '',
         job_expire_on: '',
         city: '',
-        salary: '' 
-      },
+        salary: '' ,
+        jobId: '',
       user : JSON.parse(localStorage.getItem('myData')),
       formError: { job_profile: '',  job_description: '', job_expire_on: '', city: '',salary: ''}
     }
@@ -22,17 +21,13 @@ class JobEdit extends Component {
   handleInput = (e) => {
     let value = e.target.value;
     let name = e.target.name;
-    this.setState(prevState => ({
-      editFields:
-      {
-        ...prevState.editFields, [name]: value
-      }
-    }), () => { this.validate(name, value) })
+    this.setState({ [name] : value }, () => { this.validate(name, value) })
   }
 
   componentDidMount(){
       
       var jobobj=this.props.location.state.data
+      console.log('jobObj',jobobj)
  
        this.setState({
               job_profile:jobobj.job_profile,
@@ -40,7 +35,8 @@ class JobEdit extends Component {
               job_description: jobobj.job_description,
               job_expire_on: jobobj.job_expire_on,
               city: jobobj.city,
-              salary: jobobj.salary
+              salary: jobobj.salary,
+              jobId : jobobj._id
         })
 
   }
@@ -48,20 +44,23 @@ class JobEdit extends Component {
   handleEdit = (e) => {
     e.preventDefault();
     
-    const { job_profile, company_name, job_description, job_expire_on, city, salary }=this.state 
-    
-     this.props.EditJobs({job_profile,  company_name, job_description, job_expire_on, city, salary})
+    const { job_profile, company_name, job_description, job_expire_on, city, salary,jobId }=this.state 
+    // if (this.localStorage.getItem('Currentuser')) {
+    //   companyname = JSON.parse(localStorage.getItem('Currentuser'))
+    //   company_name = companyname.replace(/"/g, '')
+    // }
+     this.props.EditJobs({job_profile,  company_name, job_description, job_expire_on, city, salary,jobId})
      alert("Successfully Edited")
     
-     this.setState({
-        job_profile: '',
-        company_name: '',
-        job_description: '',
-        job_expire_on: '',
-        city: '',
-        salary: ''
+    //  this.setState({
+    //     job_profile: '',
+    //     company_name: '',
+    //     job_description: '',
+    //     job_expire_on: '',
+    //     city: '',
+    //     salary: ''
   
-    })
+    // })
       return this.props.history.push('/');
 
   }
@@ -116,14 +115,14 @@ class JobEdit extends Component {
           <p>{this.state.formError.job_profile}</p>
 
         
-          Job description:
+          {/* Job description:
           <Input inputType={'text'}
             name={'job_description'}
             value={this.state.job_description}
             placeholder={'job description'}
             handleChange={this.handleInput}
           />
-          <p>{this.state.formError.job_description}</p>
+          <p>{this.state.formError.job_description}</p> */}
 
           Job expire date:
           <Input inputType={'text'}

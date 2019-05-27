@@ -38,6 +38,7 @@ export const signup=(data)=> {
     console.log(data);
     return dispatch => {
        axios.post('http://localhost:8082/naukriapp', data)
+       
             .then((response) => {
                     dispatch(postDataSignup(response.data));
                     return response.data   

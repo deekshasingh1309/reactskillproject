@@ -17,7 +17,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         dispatch,
         addJob: (company_data) => dispatch(addJob(company_data)),
-        JobListing: () => dispatch(JobListing()), 
+        JobListing: (skill) => dispatch(JobListing(skill)), 
         EditJobs: (edited_data) => dispatch(EditJobs(edited_data))
     }
 }

@@ -29,6 +29,7 @@ class Content extends React.Component {
       <div className="row">
       {
         data.map((key, value) => {
+          console.log('key....',key)
           return (
             <div className="container content" key={value}>
               <div className='col-sm-3'>
@@ -40,7 +41,17 @@ class Content extends React.Component {
                 <p><b>SALARY:</b> {key.salary}</p>
               </div>
               <div className='col-sm-4'>
-                <p><b>JOB:</b> {key.job_description}</p>
+          
+              <b>JOB SKILLS:</b>
+              { key.job_description.map((key1,val)=>{
+
+                return( 
+                  <div>{key1['id'] }</div>
+                  
+                  )
+              })
+            }
+          
                 <p><b>CITY:</b> {key.city}</p>
                 <p><b>EXPIRES ON:</b> {key.job_expire_on}</p>{
                 user!==null && user.roles===3?<button id="edit" onClick={(e)=>{this.edit(key)}}>Edit</button>:<button id="apply">Apply</button>
