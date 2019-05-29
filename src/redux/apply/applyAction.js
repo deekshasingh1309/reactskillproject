@@ -39,7 +39,7 @@ export const get_applyjob = (user_id) => {
         axios.get(url)
             .then((res) => {
                 console.log(res)
-              
+
                 dispatch(getapply_data(res.data));
             }).catch((err) => {
                 return err;
