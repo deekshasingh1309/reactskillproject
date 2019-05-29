@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import Input from './fields/inputField';
-import SKILLS  from '../skills'
+import SKILLS from '../skills'
 import { WithContext as ReactTags } from 'react-tag-input'
 
 const KeyCodes = {
-    comma: 188,
-    enter: 13
+  comma: 188,
+  enter: 13
 }
 
 const suggestions = SKILLS.map(skill => {
   return {
-      id: skill,
-      text: skill
+    id: skill,
+    text: skill
   }
 })
 const delimiters = [KeyCodes.comma, KeyCodes.enter]
@@ -19,16 +19,16 @@ const delimiters = [KeyCodes.comma, KeyCodes.enter]
 class Company extends Component {
   constructor(props) {
     super(props);
-   var user = JSON.parse(localStorage.getItem('myData'))
+    var user = JSON.parse(localStorage.getItem('myData'))
     this.state = {
-        job_profile: '',
-        company_name: user.name,
-        job_description: [],
-        job_expire_on: '',
-        city: '',
-        salary: '',
-        suggestions: suggestions,
-    
+      job_profile: '',
+      company_name: user.name,
+      job_description: [],
+      job_expire_on: '',
+      city: '',
+      salary: '',
+      suggestions: suggestions,
+
       formError: { job_profile: '', company_name: '', job_description: '', job_expire_on: '', city: '', salary: '' }
     }
   }
@@ -37,8 +37,8 @@ class Company extends Component {
     let value = e.target.value;
     let name = e.target.name;
     this.setState(prevState => ({
-        ...prevState, [name]: value,
-       
+      ...prevState, [name]: value,
+
     }), () => { this.validate(name, value) })
   }
 
@@ -70,14 +70,14 @@ class Company extends Component {
   handleDelete = (i) => {
     const { job_description } = this.state
     this.setState({
-        job_description: job_description.filter((tag, index) => index !== i)
+      job_description: job_description.filter((tag, index) => index !== i)
     })
-}
+  }
 
-handleAddition = (tag) => {
+  handleAddition = (tag) => {
     this.setState(state => ({ job_description: [...state.job_description, tag] })
     )
-}
+  }
 
 
   validate = (field, value) => {
@@ -87,11 +87,6 @@ handleAddition = (tag) => {
         errors.job_profile = value.match(/^[A-Za-z\s]+$/i)
         errors.job_profile = errors.job_profile ? '' : 'it is invalid';
         break;
-
-      // case 'company_name':
-      //   errors.company_name = value.match(/^[A-Za-z\s]+$/i)
-      //   errors.company_name = errors.company_name ? '' : 'it is invalid';
-      //   break;
 
       case 'job_description':
         errors.job_description = value.match(/^[A-Za-z\s]+$/i)
@@ -120,13 +115,13 @@ handleAddition = (tag) => {
       formError: errors
     })
   }
- 
+
 
   render() {
-  
+
     const { job_description, suggestions } = this.state
     return (
-        <form className="form" >
+      <form className="form" >
         Profile:
           <Input inputType={'text'}
           name={'job_profile'}
@@ -137,14 +132,14 @@ handleAddition = (tag) => {
 
         Job Skills:
         <ReactTags
-                  tags={job_description}
-                  suggestions={suggestions}
-                  delimiters={delimiters}
-                  handleDelete={this.handleDelete}
-                  handleAddition={this.handleAddition}
-                  handleDrag={this.handleDrag}
-            />
-           
+          tags={job_description}
+          suggestions={suggestions}
+          delimiters={delimiters}
+          handleDelete={this.handleDelete}
+          handleAddition={this.handleAddition}
+          handleDrag={this.handleDrag}
+        />
+
         <p>{this.state.formError.job_description}</p>
 
         Job expire date:
@@ -175,8 +170,8 @@ handleAddition = (tag) => {
         <p>{this.state.formError.salary}</p>
 
         <button className="btn btn-primary" onClick={this.handleCompany}>Add</button>
-        </form>
-      
+      </form>
+
     );
   }
 }

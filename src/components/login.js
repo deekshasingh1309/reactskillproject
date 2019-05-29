@@ -37,6 +37,7 @@ class Login extends Component {
       localStorage.setItem("Currentuser", JSON.stringify(nextProps.currentUser.name));
       localStorage.setItem("myData", JSON.stringify(nextProps.currentUser));
       localStorage.setItem("user_type", JSON.stringify(nextProps.currentUser.roles));
+      localStorage.setItem("Currentid", JSON.stringify(nextProps.currentUser._id));
 
       return this.props.history.push('/')
    })

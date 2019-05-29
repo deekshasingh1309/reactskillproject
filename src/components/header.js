@@ -16,29 +16,33 @@ class Header extends React.Component {
         return (
             <div>
                 <div className="header">
-                        <nav>
-                            <div className="header-left">
-                                <img src={Image} alt="applogo" id="logo"></img>
-                                <span><Link to='/'>Home</Link></span > 
-                            </div>
-                            <div className="header-right">
-                                {
-                                    !isLoggedin() && <span><Link to='/signup'>Signup</Link></span>
-                                }
-                                {
-                                    !isLoggedin() && <span><Link to='/login'>Login</Link></span>
-                                }
-                                {
-                                    isLoggedin() && this.user.roles === 3 &&  <span><Link to='/addjobs'>Add Job</Link></span>
-                                }
-                                {
-                                    isLoggedin() &&  <span><Link to='/login'></Link></span> && <span>Welcome {this.user.name}</span>
-                                }
-                                {
-                                    isLoggedin() &&  <span><Link to='/' onClick={this.logout}>Logout</Link></span>
-                                }
-                            </div>
-                        </nav>
+                    <nav>
+                        <div className="header-left">
+                            <img src={Image} alt="applogo" id="logo"></img>
+                            <span><Link to='/'>Home</Link></span >
+                        </div>
+                        <div className="header-right">
+                            {
+                                !isLoggedin() && <span><Link to='/signup'>Signup</Link></span>
+                            }
+                            {
+                                !isLoggedin() && <span><Link to='/login'>Login</Link></span>
+                            }
+                            {
+                                isLoggedin() && this.user.roles === 3 && <span><Link to='/addjobs'>Add Job</Link></span>
+                            }
+                            {
+                                isLoggedin() && this.user.roles === 3 && <span><Link to='/AppliedJob'>See Apply</Link></span>
+                            }
+                            {
+                                isLoggedin() && <span><Link to='/login'></Link></span> && <span>Welcome {this.user.name}</span>
+                            }
+                            {
+                                isLoggedin() && <span><Link to='/' onClick={this.logout}>Logout</Link></span>
+                            }
+
+                        </div>
+                    </nav>
                 </div>
             </div>
         )
